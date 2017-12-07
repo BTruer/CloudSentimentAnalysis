@@ -27,7 +27,9 @@ def index():
 @app.route("/search", methods=['GET'])
 def search():
     query = request.args.get('query')
+    #get the twitter data
     data = getTwitterData(query)
+    #send the twitter data to the nural net
     return data
 
 def getTwitterData(query):
@@ -35,11 +37,15 @@ def getTwitterData(query):
     if(collection.find({"_id":query}).count()>0):
         return dumps(collection.find({"_id":query}))
     #no go to twitter
+    at = "%40"
+    hashtag = "%23"
+    query2 = at+query
+    query3 = hashtag+query
     string_query = "q=%s&lang=en&locale=us&count=100" % query
     results1 = api.GetSearch(raw_query=string_query)
-    string_query = "q=%40%%s&lang=en&locale=us&count=100" % query
+    string_query = "q=%s&lang=en&locale=us&count=100" % query2
     results2 = api.GetSearch(raw_query=string_query)
-    string_query = "q=%23%%s&lang=en&locale=us&count=100" % query
+    string_query = "q=%s&lang=en&locale=us&count=100" % query3
     results3 = api.GetSearch(raw_query=string_query)
     results = str(results1) + "," + str(results2) + "," + str(results3)
     data = str(results)

@@ -2,3 +2,4 @@ venv/
 *.pyc
 env.txt
 env.sh
+__pycache__
