@@ -29,14 +29,16 @@ def search():
 
 def getTheData(query):
     #if its in the db (been spark processed) get it from there
+    
     #send the data to react
     #no go to twitter
-    results = api.GetSearch(raw_query="q=apple&lang=en&locale=us&count=100")
+    string_query = "q=%s&lang=en&locale=us&count=100" % query
+    results = api.GetSearch(raw_query=string_query)
     #then send it to spark
     #sparkNN(twitter data)
     #get the result spark
     #send to react
-    return query
+    return results
 
 if __name__ == '__main__':
     app.run(debug=True)
