@@ -8,15 +8,14 @@ import keras
 import pyspark
 import numpy as np
 from pyspark.sql import SparkSession
-from keras.preprocessing.text 
-import Tokenizer
+from keras.preprocessing.text import Tokenizer
 import re
 import cPickle as pickle
 
 sc = pyspark.SparkContext(appName="preprocessor")
 ss = SparkSession(sc)
 
-def preprocess_csv()
+def preprocess_csv():
 
     with open('tokenizer.pickle', 'rb') as handle:
         t = pickle.load(handle)
@@ -27,13 +26,18 @@ def preprocess_csv()
     def get_tweets(row):
         return row[3]
 
+    def get_labels(row):
+        return row[1]
+
     def remove_urls(tweet):
         return re.sub(r"http\S+", "", tweet)
 
     rdd = ss.read.csv("Sentiment Analysis Dataset.csv").rdd.map(list)
-    # header = rdd.first()
+    header = rdd.first()
     rdd = rdd.filter(lambda line: line != header)
     tweets_rdd = rdd.map(lambda line: get_tweets(line).encode('utf-8'))
+    # labels_rdd = rdd.map(lambda line: get_labels(line))
+
     tweets_rdd = tweets_rdd.map(lambda line: remove_urls(line).lstrip(' '))
     # tweets_rdd.first()
 
@@ -45,6 +49,14 @@ def preprocess_csv()
     padded_rdd = digits_rdd.map(lambda line: pad(line))
 
     return padded_rdd.collect()
+
+preprocess_csv()
+
+ss.stop()
+     
+
+    
+
 
      
 
