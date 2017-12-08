@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 import os
 import twitter
 from pymongo import MongoClient
@@ -18,19 +18,35 @@ api = twitter.Api(consumer_key=tck,
 client = MongoClient('localhost', 27017)
 db = client.twitter #twitter db
 collection = db.twitter_collect
+collection2 = db.nn_data
 
 @app.route("/", methods=['GET'])
 def index():
-    return "working"
+    return render_template('index.html')
 
 #take in a string and return the twitter data
-@app.route("/search", methods=['GET'])
+@app.route("/search", methods=['POST'])
 def search():
-    query = request.args.get('query')
+    query = request.form['query']
     #get the twitter data
     data = getTwitterData(query)
     #send the twitter data to the neural net
-    return data
+    res = processTwitterData(data,query)
+    return res
+
+def processTwitterData(data,query):
+    #if nn data is in db
+    if(collection2.find({"_id":query}).count()>0):
+        return dumps(collection.find({"_id":query}))
+    #no go to nn
+    res = NN(data)
+    #store it
+    collection2.insert({"_id":query, "res":res})
+    #get from db and return
+    return dumps(collection2.find({"_id":query}))
+
+def NN(data):
+    return "positive,80%"
 
 def getTwitterData(query):
     #if twitter data is in db
