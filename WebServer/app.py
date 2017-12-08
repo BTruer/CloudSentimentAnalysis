@@ -29,7 +29,7 @@ def search():
     query = request.args.get('query')
     #get the twitter data
     data = getTwitterData(query)
-    #send the twitter data to the nural net
+    #send the twitter data to the neural net
     return data
 
 def getTwitterData(query):
