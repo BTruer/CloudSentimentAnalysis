@@ -3,3 +3,4 @@ venv/
 env.txt
 env.sh
 __pycache__
+*.csv
