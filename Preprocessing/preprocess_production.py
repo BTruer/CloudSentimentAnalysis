@@ -18,7 +18,7 @@ sc = pyspark.SparkContext(appName="preprocessor")
 ss = SparkSession(sc)
 sqlContext = SQLContext(sc)
 
-def preprocess():
+def preprocess(filename):
 
     def remove_urls(tweet):
 	    return re.sub(r"http\S+", "", tweet)
@@ -35,7 +35,8 @@ def preprocess():
 	        a = x.strip("(").strip(")").split(',', 3)# x.strip("(").split(',', 3))  # ((int(a), str(b), str(c), str(d)))
 	    return a
 
-    jdf = ss.read.json("../WebServer/sampledata_apple").rdd.map(list)
+    # jdf = ss.read.json("../WebServer/sampledata_apple").rdd.map(list)
+    jdf = ss.read.json("../WebServer/"+filename).rdd.map(list)
     twitter_data = jdf.map(lambda l: l[1].encode("utf-8").replace("Status", ""))
 
     clean_data = twitter_data.map(lambda l: l.replace("[", "").replace("]", ""))
