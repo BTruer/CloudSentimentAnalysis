@@ -13,4 +13,4 @@ Sentiment analysis of entities on the cloud using Twitter data
 8. requires pyspark
 8. To use: GET http://127.0.0.1:5000/search?query=apple
 
-Note: the producation enviroment for the demo does not use caching for ease of reading. 
+Note: the producation environment for the demo does not use caching for ease of reading. 

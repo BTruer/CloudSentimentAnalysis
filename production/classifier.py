@@ -54,4 +54,4 @@ def analyse(data, company):
     plt.legend(handles=[red_patch])
     plt.title("Overall Sentiment: " + company)
     figure.savefig('plot.png')
-
+    return None
