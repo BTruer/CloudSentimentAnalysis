@@ -22,6 +22,9 @@ def get_dummy_data():
     return data
 
 
+'''
+init the base keras model so that the analyse method may be called
+'''
 def init_classifier():
     global model
     global t
@@ -31,6 +34,11 @@ def init_classifier():
         t = pickle.load(handle)
     
 
+'''
+    data: preprocessed twitter tweets
+    company: company_name for graphing purposes
+    return: sentiment graph based on data as plot.png
+'''
 def analyse(data, company):
     encoded_tweets = t.texts_to_sequences(data)
     padded_tweets = pad_sequences(encoded_tweets, maxlen=280, padding='post')
